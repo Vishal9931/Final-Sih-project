@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Chat - Smart Crop Advisory</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f3f7f5;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    height: 80vh;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 220px;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    background: #e8f5e9;
+  }
+
+  .sidebar h3 {
+    margin-top: 0;
+    color: #2e7d32;
+    margin-bottom: 15px;
+  }
+
+  .farmer {
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #c8e6c9;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .farmer:hover {
+    background: #a5d6a7;
+  }
+
+  .farmer.active {
+    background: #2e7d32;
+    color: white;
+  }
+
+  .chat-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-window {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .message {
+    margin-bottom: 15px;
+    display: flex;
+  }
+
+  .message.farmer {
+    justify-content: flex-start;
+  }
+
+  .message.ai {
+    justify-content: flex-end;
+  }
+
+  .message p {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin: 0;
+  }
+
+  .message.farmer p {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .message.ai p {
+    background: #c8e6c9;
+    color: #1b5e20;
+  }
+
+  .input-area {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid #ddd;
+    gap: 10px;
+  }
+
+  .input-area input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  .input-area button {
+    padding: 12px 20px;
+    background: #4caf50;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .input-area button:hover {
+    background: #388e3c;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Farmer List Sidebar -->
+  <div class="sidebar">
+    <h3>Farmers</h3>
+    <div class="farmer active" data-name="Farmer 1">Farmer 1</div>
+    <div class="farmer" data-name="Farmer 2">Farmer 2</div>
+    <div class="farmer" data-name="Farmer 3">Farmer 3</div>
+  </div>
+
+  <!-- Chat Section -->
+  <div class="chat-section">
+    <div class="chat-window" id="chatWindow"></div>
+    <div class="input-area">
+      <input type="text" id="messageInput" placeholder="Type your message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const chatWindow = document.getElementById('chatWindow');
+  const messageInput = document.getElementById('messageInput');
+  const farmers = document.querySelectorAll('.farmer');
+
+  let currentFarmer = "Farmer 1";
+
+  // Chat history for each farmer
+  const chatHistory = {
+    "Farmer 1": [],
+    "Farmer 2": [],
+    "Farmer 3": []
+  };
+
+  function renderChat() {
+    chatWindow.innerHTML = "";
+    chatHistory[currentFarmer].forEach(msg => {
+      appendMessage(msg.text, msg.sender, false);
+    });
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  function appendMessage(text, sender, save=true) {
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message', sender);
+    const messageText = document.createElement('p');
+    messageText.innerText = text;
+    messageDiv.appendChild(messageText);
+    chatWindow.appendChild(messageDiv);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+
+    if(save) {
+      chatHistory[currentFarmer].push({text, sender});
+    }
+  }
+
+  function sendMessage() {
+    const msg = messageInput.value.trim();
+    if(msg === "") return;
+
+    appendMessage(msg, 'farmer');
+    messageInput.value = '';
+
+    // AI response simulation
+    setTimeout(() => {
+      const aiReply = getAIResponse(msg);
+      appendMessage(aiReply, 'ai');
+    }, 1000);
+
+    // Simulate broadcasting to other farmers (optional)
+    broadcastMessage(msg);
+  }
+
+  function getAIResponse(message) {
+    const lower = message.toLowerCase();
+    if(lower.includes('wheat')) return "AI: Wheat demand is high, consider planting more.";
+    if(lower.includes('pest')) return "AI: Use neem-based solutions and rotate crops.";
+    if(lower.includes('price')) return "AI: Current market price is around ₹2500 per quintal.";
+    return "AI: I am here to assist you with crop advice. Tell me more.";
+  }
+
+  // Switch farmer chat
+  farmers.forEach(f => {
+    f.addEventListener('click', () => {
+      farmers.forEach(f2 => f2.classList.remove('active'));
+      f.classList.add('active');
+      currentFarmer = f.dataset.name;
+      renderChat();
+    });
+  });
+
+  // Simulate broadcasting messages to all farmers
+  function broadcastMessage(msg) {
+    Object.keys(chatHistory).forEach(farmer => {
+      if(farmer !== currentFarmer) {
+        chatHistory[farmer].push({text: `Message from ${currentFarmer}: ${msg}`, sender: 'farmer'});
+      }
+    });
+  }
+
+  // Welcome messages
+  Object.keys(chatHistory).forEach(f => {
+    chatHistory[f].push({text: "Welcome to the Smart Crop Community!", sender: 'ai'});
+  });
+
+  renderChat();
+</script>
+
+</body>
+</html>

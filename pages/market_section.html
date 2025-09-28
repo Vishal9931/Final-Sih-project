@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Demand - Smart Crop Advisory</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f7f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .demand-bar {
+      height: 12px;
+      border-radius: 6px;
+      background: #ddd;
+      position: relative;
+    }
+
+    .fill {
+      height: 100%;
+      border-radius: 6px;
+    }
+
+    .high { background: #2e7d32; }
+    .medium { background: #fbc02d; }
+    .low { background: #d32f2f; }
+
+    .form-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .form-group input, .form-group select, .form-group button {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .form-group input, .form-group select {
+      flex: 1;
+    }
+
+    .form-group button {
+      background: #4caf50;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .form-group button:hover {
+      background: #388e3c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📊 Market Demand</h2>
+
+    <!-- Table -->
+    <table id="demandTable">
+      <tr>
+        <th>Crop</th>
+        <th>Region</th>
+        <th>Demand Level</th>
+        <th>Indicator</th>
+      </tr>
+      <!-- Rows will be added dynamically -->
+    </table>
+
+    <!-- Add New Crop Form -->
+    <div class="form-group">
+      <input type="text" id="cropName" placeholder="Crop Name">
+      <input type="text" id="region" placeholder="Region">
+      <select id="demandLevel">
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+      <button onclick="addCrop()">Add Crop</button>
+    </div>
+  </div>
+
+  <script>
+    const table = document.getElementById("demandTable");
+
+    function addCrop() {
+      const crop = document.getElementById("cropName").value.trim();
+      const region = document.getElementById("region").value.trim();
+      const level = document.getElementById("demandLevel").value;
+
+      if (!crop || !region) {
+        alert("⚠️ Please enter crop name and region!");
+        return;
+      }
+
+      // Determine width percentage and color based on demand level
+      let width, colorClass;
+      if (level === "High") { width = "90%"; colorClass = "high"; }
+      else if (level === "Medium") { width = "60%"; colorClass = "medium"; }
+      else { width = "30%"; colorClass = "low"; }
+
+      // Create new row
+      const row = table.insertRow();
+      row.innerHTML = `
+        <td>${crop}</td>
+        <td>${region}</td>
+        <td>${level}</td>
+        <td>
+          <div class="demand-bar">
+            <div class="fill ${colorClass}" style="width: ${width};"></div>
+          </div>
+        </td>
+      `;
+
+      // Clear inputs
+      document.getElementById("cropName").value = "";
+      document.getElementById("region").value = "";
+      document.getElementById("demandLevel").value = "High";
+    }
+
+    // Optional: Preload some sample crops
+    const sampleCrops = [
+      {crop: "Wheat", region: "Uttar Pradesh", level: "High"},
+      {crop: "Rice", region: "Bihar", level: "Medium"},
+      {crop: "Maize", region: "Madhya Pradesh", level: "Low"}
+    ];
+
+    sampleCrops.forEach(c => {
+      document.getElementById("cropName").value = c.crop;
+      document.getElementById("region").value = c.region;
+      document.getElementById("demandLevel").value = c.level;
+      addCrop();
+    });
+  </script>
+</body>
+</html>

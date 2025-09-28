@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit Calculator - Smart Crop Advisory</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f7f5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #4caf50;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #388e3c;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #f9fdfb;
+      border: 1px solid #e0e0e0;
+    }
+
+    .result p {
+      margin: 8px 0;
+      font-size: 16px;
+    }
+
+    .profit {
+      color: #2e7d32;
+      font-weight: bold;
+    }
+
+    .loss {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🌾 Profit Calculator</h2>
+
+    <!-- Form -->
+    <label for="crop">Crop Name</label>
+    <input type="text" id="crop" placeholder="Enter Crop Name">
+
+    <label for="cost">Total Cost (₹)</label>
+    <input type="number" id="cost" placeholder="Enter Total Cost">
+
+    <label for="price">Selling Price per Unit (₹)</label>
+    <input type="number" id="price" placeholder="Enter Selling Price">
+
+    <label for="quantity">Quantity Sold</label>
+    <input type="number" id="quantity" placeholder="Enter Quantity Sold">
+
+    <button onclick="calculateProfit()">Calculate Profit</button>
+
+    <!-- Result Section -->
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateProfit() {
+      let crop = document.getElementById("crop").value;
+      let cost = parseFloat(document.getElementById("cost").value);
+      let price = parseFloat(document.getElementById("price").value);
+      let quantity = parseFloat(document.getElementById("quantity").value);
+
+      if (!crop || isNaN(cost) || isNaN(price) || isNaN(quantity)) {
+        alert("⚠️ Please fill all fields correctly!");
+        return;
+      }
+
+      let revenue = price * quantity;
+      let profit = revenue - cost;
+      let profitPercent = (profit / cost) * 100;
+
+      let resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `
+        <p><strong>Crop:</strong> ${crop}</p>
+        <p><strong>Total Revenue:</strong> ₹${revenue.toFixed(2)}</p>
+        <p><strong>${profit >= 0 ? "Profit" : "Loss"}:</strong> 
+          <span class="${profit >= 0 ? 'profit' : 'loss'}">₹${profit.toFixed(2)}</span>
+        </p>
+        <p><strong>Profit Percentage:</strong> ${profitPercent.toFixed(2)}%</p>
+      `;
+    }
+  </script>
+</body>
+</html>

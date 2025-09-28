@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Guide - Smart Crop Advisory</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f9f4;
+    }
+    header {
+      background: #2e7d32;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      color: #2e7d32;
+    }
+    .card p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #444;
+    }
+    .details {
+      margin-top: 30px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .details h2 {
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌾 Crop Guide</h1>
+    <p>Learn about soil, irrigation, diseases, and harvesting practices for major crops</p>
+  </header>
+
+  <div class="container">
+    <!-- Crop Cards -->
+    <div class="grid">
+      <div class="card" onclick="showDetails('wheat')">
+        <h3>Wheat</h3>
+        <p>Best season: Rabi (Nov-Apr)</p>
+      </div>
+      <div class="card" onclick="showDetails('rice')">
+        <h3>Rice</h3>
+        <p>Best season: Kharif (Jun-Nov)</p>
+      </div>
+      <div class="card" onclick="showDetails('maize')">
+        <h3>Maize</h3>
+        <p>Flexible: Kharif & Rabi</p>
+      </div>
+      <div class="card" onclick="showDetails('cotton')">
+        <h3>Cotton</h3>
+        <p>Best season: Kharif (Apr-Nov)</p>
+      </div>
+      <div class="card" onclick="showDetails('sugarcane')">
+        <h3>Sugarcane</h3>
+        <p>Best season: Year-round (12-18 months)</p>
+      </div>
+    </div>
+
+    <!-- Details Section -->
+    <div id="detailsBox" class="details">
+      <h2 id="cropName"></h2>
+      <p><strong>Soil:</strong> <span id="soil"></span></p>
+      <p><strong>Irrigation:</strong> <span id="irrigation"></span></p>
+      <p><strong>Diseases:</strong> <span id="diseases"></span></p>
+      <p><strong>Harvesting Tips:</strong> <span id="harvest"></span></p>
+    </div>
+  </div>
+
+<script>
+  const cropData = {
+    wheat: {
+      name: "Wheat",
+      soil: "Well-drained loamy soil, pH 6-7.5",
+      irrigation: "Requires 4-5 irrigations, critical stages: Crown root initiation & flowering",
+      diseases: "Rust, Smut, Powdery mildew",
+      harvest: "Harvest when grains are hard and moisture content is around 20%"
+    },
+    rice: {
+      name: "Rice",
+      soil: "Clayey loam, needs standing water",
+      irrigation: "Continuous flooding until maturity",
+      diseases: "Blast, Sheath blight, Bacterial blight",
+      harvest: "Harvest at 20-24% moisture; dry immediately"
+    },
+    maize: {
+      name: "Maize",
+      soil: "Sandy loam with good drainage",
+      irrigation: "4-6 irrigations depending on season",
+      diseases: "Downy mildew, Rust, Stem borer",
+      harvest: "Harvest when husks turn brown and kernels hard"
+    },
+    cotton: {
+      name: "Cotton",
+      soil: "Black cotton soil (regur soil) is best",
+      irrigation: "Requires 6-8 irrigations, avoid waterlogging",
+      diseases: "Bollworm, Wilt, Aphids",
+      harvest: "Pick cotton when bolls burst fully"
+    },
+    sugarcane: {
+      name: "Sugarcane",
+      soil: "Deep fertile loam, pH 6.5-7.5",
+      irrigation: "Requires 20-25 irrigations, depends on climate",
+      diseases: "Red rot, Smut, Ratoon stunting",
+      harvest: "Harvest when cane is 12-16 months old, before flowering"
+    }
+  };
+
+  function showDetails(crop) {
+    const cropInfo = cropData[crop];
+    document.getElementById('cropName').innerText = cropInfo.name;
+    document.getElementById('soil').innerText = cropInfo.soil;
+    document.getElementById('irrigation').innerText = cropInfo.irrigation;
+    document.getElementById('diseases').innerText = cropInfo.diseases;
+    document.getElementById('harvest').innerText = cropInfo.harvest;
+
+    document.getElementById('detailsBox').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
